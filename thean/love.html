@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question for You ❤️</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            margin-top: 100px;
+            position: relative;
+        }
+        h1 {
+            font-size: 40px;
+        }
+        #yesBtn {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: pink;
+            border: none;
+            border-radius: 10px;
+            margin: 10px;
+        }
+        #noBtn {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: lightgray;
+            border: none;
+            border-radius: 10px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Do you love me? ❤️</h1>
+
+    <button id="yesBtn" onclick="showLove()">Yes 💖</button>
+    <button id="noBtn">No 😢</button>
+
+    <p id="result"></p>
+
+    <script>
+        function showLove() {
+            document.getElementById("result").innerHTML = "I love you too 😍❤️";
+        }
+
+        const noBtn = document.getElementById("noBtn");
+
+        noBtn.addEventListener("mouseover", function() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        });
+    </script>
+
+</body>
+</html>
