@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Small Request</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(80, 150, 255, 0.28), transparent 42%),
+        radial-gradient(circle at 82% 78%, rgba(235, 58, 90, 0.22), transparent 40%),
+        linear-gradient(135deg, #0f2a56, #1f4b93, #ffffff);
+      font-family: Georgia, "Times New Roman", serif;
+      color: #102447;
+      text-align: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .card {
+      max-width: 760px;
+      width: min(92vw, 760px);
+      padding: 38px 28px;
+      background: rgba(8, 20, 45, 0.42);
+      border: 1px solid rgba(190, 220, 255, 0.32);
+      box-shadow:
+        0 20px 46px rgba(3, 10, 28, 0.5),
+        inset 0 0 22px rgba(170, 205, 255, 0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 1.2s ease;
+    }
+
+    .text {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.4;
+      margin: 0 0 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: reveal 1.4s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    .actions {
+      position: relative;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 26px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #yesBtn {
+      position: absolute;
+      left: 35%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #e62e58, #bf1842);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(161, 26, 58, 0.35);
+    }
+
+    #yesBtn:hover {
+      transform: translate(-50%, calc(-50% - 2px));
+    }
+
+    #noBtn {
+      position: absolute;
+      left: 65%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #eaf2ff;
+      color: #123a7a;
+      border: 1px solid rgba(18, 58, 122, 0.2);
+      box-shadow: 0 8px 16px rgba(14, 42, 95, 0.16);
+    }
+
+    .result {
+      margin-top: 18px;
+      min-height: 34px;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      color: #b3193d;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .result.show {
+      opacity: 1;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 18px;
+      color: rgba(195, 25, 61, 0.55);
+      animation: floatUp linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 16px;
+      }
+
+      .card {
+        width: 100%;
+        padding: 28px 16px;
+        border-radius: 16px;
+      }
+
+      .text {
+        font-size: clamp(1.2rem, 6.2vw, 1.55rem);
+        margin-bottom: 16px;
+      }
+
+      .actions {
+        height: 80px;
+      }
+
+      button {
+        padding: 11px 20px;
+        font-size: 0.95rem;
+      }
+
+      #yesBtn {
+        left: 32%;
+      }
+
+      #noBtn {
+        left: 73%;
+      }
+
+      .result {
+        font-size: clamp(1rem, 4.8vw, 1.2rem);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .actions {
+        height: 88px;
+      }
+
+      #yesBtn {
+        left: 30%;
+      }
+
+      #noBtn {
+        left: 76%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <p class="text">Will you join Discord with me?</p>
+
+    <div class="actions">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+
+    <p class="result" id="resultText">Come Fast Really Miss You.</p>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const resultText = document.getElementById('resultText');
+    const actions = document.querySelector('.actions');
+
+    function resetNoButtonPosition() {
+      noBtn.style.left = '';
+      noBtn.style.top = '';
+      noBtn.style.transform = '';
+    }
+
+    function moveNoButton() {
+      const areaRect = actions.getBoundingClientRect();
+      const yesRect = yesBtn.getBoundingClientRect();
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const isMobile = window.innerWidth <= 700;
+
+      const minX = Math.max(8, areaRect.width * (isMobile ? 0.58 : 0.52));
+      const maxX = Math.max(minX, areaRect.width - btnWidth - 8);
+      const maxY = Math.max(0, areaRect.height - btnHeight);
+
+      let x = minX;
+      let y = 0;
+      let tries = 0;
+
+      do {
+        x = minX + Math.random() * (maxX - minX);
+        y = Math.random() * maxY;
+        const noRect = {
+          left: areaRect.left + x,
+          right: areaRect.left + x + btnWidth,
+          top: areaRect.top + y,
+          bottom: areaRect.top + y + btnHeight
+        };
+        const overlap =
+          noRect.left < yesRect.right &&
+          noRect.right > yesRect.left &&
+          noRect.top < yesRect.bottom &&
+          noRect.bottom > yesRect.top;
+        if (!overlap) break;
+        tries++;
+      } while (tries < 25);
+
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+      noBtn.style.transform = 'none';
+    }
+
+    yesBtn.addEventListener('click', () => {
+      resultText.classList.add('show');
+      createHeartBurst(14);
+    });
+
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    window.addEventListener('resize', resetNoButtonPosition);
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = Math.random() > 0.5 ? '❤' : '♡';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.bottom = '-20px';
+      heart.style.fontSize = 14 + Math.random() * 18 + 'px';
+      heart.style.animationDuration = 4 + Math.random() * 3 + 's';
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 7000);
+    }
+
+    function createHeartBurst(count) {
+      for (let i = 0; i < count; i++) {
+        createHeart();
+      }
+    }
+
+    setInterval(createHeart, 700);
+  </script>
+</body>
+</html>
